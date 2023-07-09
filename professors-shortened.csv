@@ -1,0 +1,11 @@
+advisee,year,advisor
+Isaac Newton,1668,
+Roger Cotes,1706,Isaac Newton
+Robert Smith,1715,Roger Cotes
+Walter Taylor,1723,Robert Smith
+Stephen Whisson,1742,Walter Taylor
+Thomas Postlethwaite,1756,Stephen Whisson
+Thomas Jones,1782,Thomas Postlethwaite
+Adam Sedgwick,1811,Thomas Jones
+William Hopkins,1830,Adam Sedgwick
+Arthur Cayley,1864,William Hopkins

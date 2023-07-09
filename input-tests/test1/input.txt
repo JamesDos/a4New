@@ -1,0 +1,8 @@
+contains Andrew Myers
+contains John Doe
+size Isaac Newton
+advisor Mary Cartwright
+ancestor Andrew Myers, Eric Brewer
+lineage John McCarthy
+print
+exit
