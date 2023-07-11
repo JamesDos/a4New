@@ -84,7 +84,8 @@ public class PhDTree {
     public int numAdvisees() {
         // TODO 1: Implement this method according to its specification.
         // The implementation can be a one-liner.
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+        return advisees.size();
     }
 
     /**
@@ -138,7 +139,16 @@ public class PhDTree {
         // Hint: the size of a tree is just the sum of the sizes of the subtrees rooted at its
         // children, plus 1.  So call `c.size()` on each immediate child node `c`, add the results,
         // and add 1 more!
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+        if (numAdvisees() == 0){
+            return 1;
+        } else{
+            int sum = 0;
+            for(PhDTree advisee: advisees){
+                sum = 1 + advisee.size();
+            }
+            return sum;
+        }
     }
 
     /**
@@ -151,7 +161,22 @@ public class PhDTree {
         // Implementation constraint: This method must be recursive.
         // Hint: how can you use the result of `c.maxDepth()`, for each child `c`, to obtain the
         // maximum depth from the current node?
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+
+        // maxDepth is maximum depth reached from any previous tree traversal
+        int maxDepth = 1;
+        // Ex. if maxDepth() is called on the root's child, currDepth would be 1
+        if (numAdvisees() == 0){
+            return 1;
+        } else{
+            for(PhDTree advisee: advisees){
+                int currDepth = 1 + advisee.maxDepth();
+                if(currDepth > maxDepth){
+                    maxDepth = currDepth;
+                }
+            }
+            return maxDepth;
+        }
     }
 
     /**
@@ -163,7 +188,24 @@ public class PhDTree {
         // Implementation constraint: This method must be recursive.
         // Since the method can throw an exception, your recursive calls will need to happen inside
         // a try–catch block so that you can handle their exceptions and do the right thing.
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+        assert targetName != null && !targetName.isEmpty();
+        if(professor.name().equals(targetName)) {
+            PhDTree output = new PhDTree(professor);
+            output.advisees.addAll(advisees);
+            return output;
+        }
+        if (numAdvisees() != 0) {
+            for (PhDTree advisee : advisees) {
+                try {
+                    return findTree(advisee.prof().name());
+                } catch (NotFound exc) {
+                    continue;
+                }
+            }
+        }
+        throw new NotFound();
+
     }
 
     /**

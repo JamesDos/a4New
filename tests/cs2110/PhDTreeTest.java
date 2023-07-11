@@ -20,6 +20,7 @@ public class PhDTreeTest {
     private static final Professor prof4 = new Professor("Arianna Curillo", 2022);
     private static final Professor prof5 = new Professor("Michelle Gao", 2022);
     private static final Professor prof6 = new Professor("Isa Siu", 2024);
+    private static final Professor prof7 = new Professor("prof7", 2027);
 
     // These helper methods create a copy of each Professor object, which would normally be seen as
     // wasteful.  They do so to help expose bugs involving the use of `==` instead of `.equals()`.
@@ -38,6 +39,70 @@ public class PhDTreeTest {
         return t;
     }
 
+    // Additional Trees
+
+    // Tree of height 2; root has 1 advisee
+    private static PhDTree tree4() throws NotFound{
+        PhDTree t = new PhDTree(new Professor(prof1));
+        t.insert(prof1.name(), new Professor(prof2));
+        return t;
+    }
+
+    // Tree of height 2; root has > 1 advisees
+    private static PhDTree tree5() throws NotFound{
+        PhDTree t = new PhDTree(new Professor(prof1));
+        t.insert(prof1.name(), new Professor(prof2));
+        t.insert(prof1.name(), new Professor(prof3));
+        t.insert(prof1.name(), new Professor(prof4));
+        return t;
+    }
+
+    // Tree of height 3; root has > 1 advisees; advisees has > 1 advisee;
+    private static PhDTree tree6() throws NotFound{
+        PhDTree t = new PhDTree(new Professor(prof1));
+        t.insert(prof1.name(), new Professor(prof2));
+        t.insert(prof1.name(), new Professor(prof3));
+        t.insert(prof2.name(), new Professor(prof4));
+        t.insert(prof2.name(), new Professor(prof5));
+        t.insert(prof3.name(), new Professor(prof6));
+        t.insert(prof3.name(), new Professor(prof7));
+        return t;
+    }
+
+    // Tree of height 4; root has > 1 advisees; unbalanced branches; largest branch on left
+    private static PhDTree tree7() throws NotFound{
+        PhDTree t = new PhDTree(new Professor(prof1));
+        t.insert(prof1.name(), new Professor(prof2));
+        t.insert(prof1.name(), new Professor(prof3));
+        t.insert(prof2.name(), new Professor(prof4));
+        t.insert(prof2.name(), new Professor(prof5));
+        t.insert(prof4.name(), new Professor(prof6));
+        t.insert(prof4.name(), new Professor(prof7));
+        return t;
+    }
+
+    // Tree of height 4; root has > 1 advisees; unbalanced branches; largest branch on right
+    private static PhDTree tree8() throws NotFound{
+        PhDTree t = new PhDTree(new Professor(prof1));
+        t.insert(prof1.name(), new Professor(prof3));
+        t.insert(prof1.name(), new Professor(prof2));
+        t.insert(prof3.name(), new Professor(prof4));
+        t.insert(prof3.name(), new Professor(prof5));
+        t.insert(prof5.name(), new Professor(prof6));
+        t.insert(prof5.name(), new Professor(prof7));
+        return t;
+    }
+
+    // Tree of height 3; root has > 1 advisees; unbalanced branches; largest branch in the middle
+    private static PhDTree tree9() throws NotFound{
+        PhDTree t = new PhDTree(new Professor(prof1));
+        t.insert(prof1.name(), new Professor(prof2));
+        t.insert(prof1.name(), new Professor(prof3));
+        t.insert(prof1.name(), new Professor(prof4));
+        t.insert(prof2.name(), new Professor(prof5));
+        return t;
+    }
+
     @Test
     public void testConstructorProfToString() {
         PhDTree t1 = tree1();
@@ -53,8 +118,17 @@ public class PhDTreeTest {
     public void testNumAdvisees() throws NotFound {
         PhDTree t = tree1();
         assertEquals(0, t.numAdvisees());
-
         // TODO: Add three additional tests of `numAdvisees()` using your own tree(s)
+
+        // Root has 1 direct advisee; height = 2
+        t = tree4();
+        assertEquals(1, t.numAdvisees());
+        // Root has > 1 direct advisee; height = 2
+        t = tree5();
+        assertEquals(3, t.numAdvisees());
+        // Root has > 1 direct advisee; each advisee has > 1 advisee; height = 3
+        t = tree6();
+        assertEquals(2, t.numAdvisees());
 
     }
 
@@ -62,9 +136,31 @@ public class PhDTreeTest {
     public void testSize() throws NotFound {
         PhDTree t = tree3();
         assertEquals(3, t.size());
-
         // TODO: Add three additional tests of `size()` using your own tree(s)
 
+        // Trivial Tree; prof is only node
+        t = tree1();
+        assertEquals(1, t.size());
+
+        // height = 2
+        t = tree5();
+        assertEquals(4, t.size());
+
+        //height = 3; balanced branches
+        t = tree6();
+        assertEquals(7, t.size());
+
+        // height = 4; unbalanced branches; largest branch on the left
+        t = tree7();
+        assertEquals(7, t.size());
+
+        // height = 4; unbalanced branches; largest branch on the right
+        t = tree8();
+        assertEquals(7, t.size());
+
+        // height = 4; unbalanced branches; largest branch on the right
+        t = tree9();
+        assertEquals(5, t.size());
     }
 
     @Test
@@ -73,6 +169,29 @@ public class PhDTreeTest {
         assertEquals(3, t.maxDepth());
 
         // TODO: Add three additional tests of `maxDepth()` using your own tree(s)
+        // Trivial Tree; prof is only node
+        t = tree1();
+        assertEquals(1, t.maxDepth());
+
+        // height = 2
+        t = tree5();
+        assertEquals(2, t.maxDepth());
+
+        //height = 3; balanced branches
+        t = tree6();
+        assertEquals(3, t.maxDepth());
+
+        // height = 4; unbalanced branches; largest branch on the left
+        t = tree7();
+        assertEquals(4, t.maxDepth());
+
+        // height = 4; unbalanced branches; largest branch on the right
+        t = tree8();
+        assertEquals(4, t.maxDepth());
+
+        // height = 4; unbalanced branches; largest branch on the right
+        t = tree9();
+        assertEquals(4, t.maxDepth());
 
     }
 
