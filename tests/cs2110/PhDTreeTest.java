@@ -141,23 +141,18 @@ public class PhDTreeTest {
         // Trivial Tree; prof is only node
         t = tree1();
         assertEquals(1, t.size());
-
         // height = 2
         t = tree5();
         assertEquals(4, t.size());
-
         //height = 3; balanced branches
         t = tree6();
         assertEquals(7, t.size());
-
         // height = 4; unbalanced branches; largest branch on the left
         t = tree7();
         assertEquals(7, t.size());
-
         // height = 4; unbalanced branches; largest branch on the right
         t = tree8();
         assertEquals(7, t.size());
-
         // height = 4; unbalanced branches; largest branch on the right
         t = tree9();
         assertEquals(5, t.size());
@@ -172,27 +167,21 @@ public class PhDTreeTest {
         // Trivial Tree; prof is only node
         t = tree1();
         assertEquals(1, t.maxDepth());
-
         // height = 2
         t = tree5();
         assertEquals(2, t.maxDepth());
-
         //height = 3; balanced branches
         t = tree6();
         assertEquals(3, t.maxDepth());
-
         // height = 4; unbalanced branches; largest branch on the left
         t = tree7();
         assertEquals(4, t.maxDepth());
-
         // height = 4; unbalanced branches; largest branch on the right
         t = tree8();
         assertEquals(4, t.maxDepth());
-
         // height = 4; unbalanced branches; largest branch on the right
         t = tree9();
         assertEquals(4, t.maxDepth());
-
     }
 
     @Test
@@ -211,7 +200,30 @@ public class PhDTreeTest {
 
         // TODO: Add three additional tests of `findTree()` using your own tree(s)
 
-        // Test
+        // Returned subtree is the entire tree
+        PhDTree t = tree3();
+        assertEquals(t.prof(), t.findTree(prof1.name()).prof());
+        assertEquals("Amy Huang[Maya Leong, Matthew Hui]", t.findTree(prof1.name()).toString());
+        assertThrows(NotFound.class, () -> t.findTree(prof5.name()));
+        assertEquals(3, t.findTree(prof1.name()).size());
+
+        // Returned subtree is a leaf
+        t = tree8();
+        PhDTree subtree = new PhDTree(prof6);
+        assertEquals(subtree.prof(), t.findTree(prof6.name()).prof());
+        assertEquals("Isa Siu", t.findTree(prof6.name()).toString());
+        assertEquals(1, t.findTree(prof6.name()).size());
+
+        // Returned subtree is a subtree of a subtree;
+        subtree = new PhDTree(prof5);
+        subtree.insert(prof5.name(), prof6);
+        subtree.insert(prof5.name(), prof7);
+        assertEquals(subtree.prof(), t.findTree(prof5.name()).prof());
+        assertEquals("Michelle Gao[Isa Siu, prof7]", t.findTree(prof5.name()).toString());
+        assertEquals(3, t.findTree(prof5.name()).size());
+    }
+
+
 
     @Test
     public void containsTest() throws NotFound {
