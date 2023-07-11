@@ -211,7 +211,7 @@ public class PhDTreeTest {
 
         // TODO: Add three additional tests of `findTree()` using your own tree(s)
 
-    }
+        // Test
 
     @Test
     public void containsTest() throws NotFound {
