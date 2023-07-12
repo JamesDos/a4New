@@ -1,13 +1,16 @@
 package cs2110;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.Vector;
 
 /**
  * Stores the academic genealogy of a "root" professor, defined as all professors who earned a PhD
@@ -284,7 +287,24 @@ public class PhDTree {
         // most-used operations efficiently.
         // Hint: The base case is when the root of this PhDTree is `targetName`, in which case the
         // lineage is a list containing only `targetName`.
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
+        List<Professor> list = new LinkedList<Professor>();
+        if(targetName.equals(professor.name())){
+            list.add(professor);
+            System.out.println(professor);
+            return list;
+        }
+        for(PhDTree advise:advisees){
+            lineageHelper(advise.findAcademicLineage(targetName));
+        }
+        return list;
+    }
+
+    public List<Professor> lineageHelper(List<Professor> l){
+        List<Professor> list = new LinkedList<Professor>();
+        ((LinkedList) list).push(l.get(0));
+        System.out.println("Helper" + list);
+        return list;
     }
 
     /**
