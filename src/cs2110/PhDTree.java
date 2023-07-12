@@ -191,10 +191,6 @@ public class PhDTree {
         // throw new UnsupportedOperationException();
         assert targetName != null && !targetName.isEmpty();
         if (professor.name().equals(targetName)) {
-            //PhDTree output = new PhDTree(new Professor(professor));
-            //output.advisees.addAll(advisees);
-            //System.out.println(this);
-            //return output;
             return this;
         }
         if (numAdvisees() != 0) {
@@ -251,7 +247,25 @@ public class PhDTree {
     public Professor findAdvisor(String targetAdviseeName) throws NotFound {
         // TODO 6: Implement this method according to its specification.
         // Implementation constraint: This method must be recursive.
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+
+        // Throws not found if targetAdvisee is not in tree or if they are the root of the tree
+        // 1st base case
+        if (contains(targetAdviseeName) &&
+                !targetAdviseeName.equals(this.prof().name())) {
+            for (PhDTree advisee : advisees) {
+                // Checks if targetAdvisee is in current tree's direct descendants
+                if (advisee.prof().name().equals(targetAdviseeName)) {
+                    return this.prof();
+                } else {
+                    try {
+                        return advisee.findAdvisor(targetAdviseeName);
+                    } catch (NotFound ignored) {
+                    }
+                }
+            }
+        }
+        throw new NotFound();
     }
 
     /**
