@@ -140,12 +140,12 @@ public class PhDTree {
         // children, plus 1.  So call `c.size()` on each immediate child node `c`, add the results,
         // and add 1 more!
         // throw new UnsupportedOperationException();
+        int sum = 1;
         if (numAdvisees() == 0){
             return 1;
         } else{
-            int sum = 0;
             for(PhDTree advisee: advisees){
-                sum = 1 + advisee.size();
+                sum = sum + advisee.size();
             }
             return sum;
         }
@@ -198,11 +198,11 @@ public class PhDTree {
             return this;
         }
         if (numAdvisees() != 0) {
-            try {
-                for (PhDTree advisee : advisees) {
+            for(PhDTree advisee: advisees){
+                try{
                     return advisee.findTree(targetName);
+                } catch (NotFound ignored){
                 }
-            } catch (NotFound ignored) {
             }
         }
         throw new NotFound();
