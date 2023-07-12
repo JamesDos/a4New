@@ -22,6 +22,11 @@ public class PhDTreeTest {
     private static final Professor prof6 = new Professor("Isa Siu", 2024);
     private static final Professor prof7 = new Professor("prof7", 2027);
 
+    private static final Professor prof8 = new Professor("Curran_Muhlberger", 2027);
+    private static final Professor prof9 = new Professor("Tomer_Shamir", 2027);
+    private static final Professor prof10 = new Professor("David_Gries", 2027);
+
+
     // These helper methods create a copy of each Professor object, which would normally be seen as
     // wasteful.  They do so to help expose bugs involving the use of `==` instead of `.equals()`.
     private static PhDTree tree1() {
@@ -45,6 +50,7 @@ public class PhDTreeTest {
     private static PhDTree tree4() throws NotFound{
         PhDTree t = new PhDTree(new Professor(prof1));
         t.insert(prof1.name(), new Professor(prof2));
+        t.insert(prof1.name(), new Professor(prof3));
         return t;
     }
 
@@ -103,6 +109,18 @@ public class PhDTreeTest {
         return t;
     }
 
+    // Tree from handout
+    private static PhDTree handoutTree() throws NotFound{
+        PhDTree t = new PhDTree(new Professor(prof2));
+        t.insert(prof2.name(), new Professor(prof3));
+        t.insert(prof3.name(), new Professor(prof1));
+        t.insert(prof1.name(), new Professor(prof10));
+        t.insert(prof2.name(), new Professor(prof8));
+        t.insert(prof8.name(), new Professor(prof9));
+        return t;
+    }
+
+
     @Test
     public void testConstructorProfToString() {
         PhDTree t1 = tree1();
@@ -121,13 +139,15 @@ public class PhDTreeTest {
         // TODO: Add three additional tests of `numAdvisees()` using your own tree(s)
 
         // Root has 1 direct advisee; height = 2
-        t = tree4();
+        t = tree3();
         assertEquals(1, t.numAdvisees());
+        // Root has > 1 direct advisee; each advisee has > 1 advisee; height = 2
+        t = tree4();
+        assertEquals(2, t.numAdvisees());
         // Root has > 1 direct advisee; height = 2
         t = tree5();
         assertEquals(3, t.numAdvisees());
-        // Root has > 1 direct advisee; each advisee has > 1 advisee; height = 3
-        t = tree6();
+        t = tree8();
         assertEquals(2, t.numAdvisees());
 
     }
@@ -198,16 +218,6 @@ public class PhDTreeTest {
         assertThrows(NotFound.class, () -> tree1.findTree(prof4.name()));
         assertEquals(1, tree1.findTree(prof3.name()).size());
 
-        // TROUBLESHOOT
-        // TODO: why does tree8() throw notfound but tree1() and tree5() dont?
-        PhDTree z = tree1();
-        z.insert(prof1.name(), prof2);
-        z.insert(prof1.name(), prof3);
-        z.insert(prof1.name(), prof4);
-        //assertThrows(NotFound.class, () -> z.findTree(prof2.name()));
-
-        PhDTree x = tree5();
-        //assertThrows(NotFound.class, () -> x.findTree(prof2.name()));
 
         // TODO: Add three additional tests of `findTree()` using your own tree(s)
 
@@ -268,7 +278,6 @@ public class PhDTreeTest {
         t1.insert(prof2.name(), prof3);
         assertTrue(t1.contains("Matthew Hui"));
 
-
     }
 
     @Test
@@ -279,6 +288,34 @@ public class PhDTreeTest {
         assertEquals("Amy Huang[Maya Leong[Matthew Hui]]", t.toString());
 
         // TODO: Add three additional tests of `insert()` using your own tree(s)
+        t = tree4();
+        assertEquals("Amy Huang[Maya Leong, Matthew Hui]", t.toString());
+
+        t = tree5();
+        assertEquals("Amy Huang[Arianna Curillo, Maya Leong, Matthew Hui]", t.toString());
+
+        // test different orders of insertion (recreating tree 5 with different order of insertion)
+        t = tree1();
+        t.insert(prof1.name(), new Professor(prof4));
+        t.insert(prof1.name(), new Professor(prof3));
+        t.insert(prof1.name(), new Professor(prof2));
+        assertEquals("Amy Huang[Arianna Curillo, Maya Leong, Matthew Hui]", t.toString());
+
+        t = tree6();
+        assertEquals("Amy Huang[Maya Leong[Arianna Curillo, Michelle Gao], "
+                + "Matthew Hui[Isa Siu, prof7]]", t.toString());
+
+        t = tree7();
+        assertEquals("Amy Huang[Maya Leong[Arianna Curillo[Isa Siu, prof7], Michelle Gao], "
+                + "Matthew Hui]", t.toString());
+
+        t = tree8();
+        assertEquals("Amy Huang[Maya Leong, Matthew Hui[Arianna Curillo, "
+                + "Michelle Gao[Isa Siu, prof7]]]", t.toString());
+
+        t = tree9();
+        assertEquals("Amy Huang[Arianna Curillo, Maya Leong[Michelle Gao], Matthew Hui]",
+                t.toString());
     }
 
     @Test
@@ -289,6 +326,57 @@ public class PhDTreeTest {
 
         // TODO: Add three additional tests of `findAdvisor()` using your own tree(s)
 
+        // Trivial Tree (tree has only root); cannot find own advisor
+        PhDTree t1 = tree1();
+        assertThrows(NotFound.class, () -> t1.findAdvisor(prof1.name()));
+
+        // Non-Trivial Tree with Balances Branches
+        PhDTree t6 = tree6();
+        assertEquals(prof1, t6.findAdvisor(prof2.name()));
+        assertEquals(prof1, t6.findAdvisor(prof3.name()));
+        assertEquals(prof2, t6.findAdvisor(prof4.name()));
+        assertEquals(prof3, t6.findAdvisor(prof7.name()));
+        // Does not return node from other branch
+        assertThrows(NotFound.class, () -> t6.findAdvisor(prof1.name()));
+
+        //TODO: Not sure whether or not test below should throw Notfound
+        //Even though technically prof3 is the parent of prof7, the implementation of findAdvisor
+        //returns Notfound if tree does not contain prof3
+        /**
+        PhDTree t6Subtree = t6.findTree(prof7.name());
+        System.out.println(t6Subtree);
+        assertEquals(prof3, t6Subtree.findAdvisor(prof7.name()));
+        // Cannot return grandparent node
+        assertThrows(NotFound.class, () -> t6Subtree.findAdvisor(prof1.name()));
+         */
+
+        PhDTree t7 = tree7();
+        assertEquals(prof1, t7.findAdvisor(prof2.name()));
+        assertEquals(prof1, t7.findAdvisor(prof3.name()));
+        assertEquals(prof2, t7.findAdvisor(prof4.name()));
+        assertEquals(prof2, t7.findAdvisor(prof5.name()));
+        assertEquals(prof4, t7.findAdvisor(prof6.name()));
+        assertEquals(prof4, t7.findAdvisor(prof7.name()));
+        // Cannot return gradparent node
+        assertNotEquals(prof2, t7.findAdvisor(prof6.name()));
+        //Method should still work after making a subtree (ensures pointers remain)
+        PhDTree t7Subtree = t7.findTree(prof2.name());
+        assertEquals(prof2, t7Subtree.findAdvisor(prof4.name()));
+        assertEquals(prof2, t7Subtree.findAdvisor(prof5.name()));
+        assertEquals(prof4, t7Subtree.findAdvisor(prof6.name()));
+
+        // Example tree from handout plus example test cases
+        PhDTree Maya_Leong = handoutTree();
+        assertThrows(NotFound.class, () -> Maya_Leong.findAdvisor(prof2.name()));
+        assertEquals(prof8, Maya_Leong.findAdvisor(prof9.name()));
+        PhDTree Curran_Muhlberger = Maya_Leong.findTree(prof8.name());
+        assertEquals(prof8, Curran_Muhlberger.findAdvisor(prof9.name()));
+        assertEquals(prof2, Maya_Leong.findAdvisor(prof3.name()));
+        PhDTree Amy_Huang = Maya_Leong.findTree(prof1.name());
+        assertThrows(NotFound.class, () -> Amy_Huang.findAdvisor(prof9.toString()));
+        PhDTree Matthew_Hui = Maya_Leong.findTree(prof3.name());
+        assertThrows(NotFound.class, () -> Matthew_Hui.findAdvisor(prof3.name()));
+        
     }
 
     @Test
