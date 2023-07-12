@@ -198,38 +198,72 @@ public class PhDTreeTest {
         assertThrows(NotFound.class, () -> tree1.findTree(prof4.name()));
         assertEquals(1, tree1.findTree(prof3.name()).size());
 
+        // TROUBLESHOOT
+        PhDTree z = tree1();
+        z.insert(prof1.name(), prof2);
+        z.insert(prof1.name(), prof4);
+        assertThrows(NotFound.class, () -> z.findTree(prof2.name()));
+
         // TODO: Add three additional tests of `findTree()` using your own tree(s)
 
-        // Returned subtree is the entire tree
-        PhDTree t = tree3();
+        // Tree only contains root
+        final PhDTree t0 = tree1();
+        assertEquals(t0.prof(), t0.findTree(prof1.name()).prof());
+        assertEquals("Amy Huang", t0.findTree(prof1.name()).toString());
+        assertThrows(NotFound.class, () -> t0.findTree(prof5.name()));
+        assertEquals(1, t0.findTree(prof1.name()).size());
+
+        // Returned subtree is the entire tree (root has children)
+        final PhDTree t = tree3();
         assertEquals(t.prof(), t.findTree(prof1.name()).prof());
-        assertEquals("Amy Huang[Maya Leong, Matthew Hui]", t.findTree(prof1.name()).toString());
+        assertEquals("Amy Huang[Maya Leong[Matthew Hui]]", t.findTree(prof1.name()).toString());
         assertThrows(NotFound.class, () -> t.findTree(prof5.name()));
         assertEquals(3, t.findTree(prof1.name()).size());
 
         // Returned subtree is a leaf
-        t = tree8();
+        final PhDTree t1 = tree8();
         PhDTree subtree = new PhDTree(prof6);
-        assertEquals(subtree.prof(), t.findTree(prof6.name()).prof());
-        assertEquals("Isa Siu", t.findTree(prof6.name()).toString());
-        assertEquals(1, t.findTree(prof6.name()).size());
+        assertEquals(subtree.prof(), t1.findTree(prof6.name()).prof());
+        assertEquals("Isa Siu", t1.findTree(prof6.name()).toString());
+        assertEquals(1, t1.findTree(prof6.name()).size());
 
         // Returned subtree is a subtree of a subtree;
         subtree = new PhDTree(prof5);
         subtree.insert(prof5.name(), prof6);
         subtree.insert(prof5.name(), prof7);
-        assertEquals(subtree.prof(), t.findTree(prof5.name()).prof());
-        assertEquals("Michelle Gao[Isa Siu, prof7]", t.findTree(prof5.name()).toString());
-        assertEquals(3, t.findTree(prof5.name()).size());
+        assertEquals(subtree.prof(), t1.findTree(prof5.name()).prof());
+        assertEquals("Michelle Gao[Isa Siu, prof7]", t1.findTree(prof5.name()).toString());
+        assertEquals(3, t1.findTree(prof5.name()).size());
+
     }
-
-
 
     @Test
     public void containsTest() throws NotFound {
         PhDTree t = tree3();
         assertTrue(t.contains("Amy Huang"));
         assertFalse(t.contains(prof6.name()));
+
+        // Tree with only root
+        PhDTree t1 = tree1();
+        assertTrue(t1.contains("Amy Huang"));
+        assertFalse(t1.contains(prof6.name()));
+
+        // Tree after inserting a prof
+        t1 = tree1();
+        t1.insert(prof1.name(), prof2);
+        assertTrue(t1.contains("Maya Leong"));
+
+        // Inserting multiple profs to the same prof
+        t1.insert(prof1.name(), prof4);
+        assertTrue(t1.contains("Arianna Curillo"));
+        System.out.println(t1);
+        assertTrue(t1.contains("Maya Leong"));
+
+        // Inserting a prof to an inserted prof
+        t1.insert(prof2.name(), prof3);
+        assertTrue(t1.contains("Matthew Hui"));
+
+
     }
 
     @Test

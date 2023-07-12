@@ -190,22 +190,22 @@ public class PhDTree {
         // a try–catch block so that you can handle their exceptions and do the right thing.
         // throw new UnsupportedOperationException();
         assert targetName != null && !targetName.isEmpty();
-        if(professor.name().equals(targetName)) {
-            PhDTree output = new PhDTree(professor);
-            output.advisees.addAll(advisees);
-            return output;
+        if (professor.name().equals(targetName)) {
+            //PhDTree output = new PhDTree(new Professor(professor));
+            //output.advisees.addAll(advisees);
+            //System.out.println(this);
+            //return output;
+            return this;
         }
         if (numAdvisees() != 0) {
-            for (PhDTree advisee : advisees) {
-                try {
-                    return findTree(advisee.prof().name());
-                } catch (NotFound exc) {
-                    continue;
+            try {
+                for (PhDTree advisee : advisees) {
+                    return advisee.findTree(targetName);
                 }
+            } catch (NotFound ignored) {
             }
         }
         throw new NotFound();
-
     }
 
     /**
@@ -231,7 +231,15 @@ public class PhDTree {
         // Implementation constraint: This method should NOT be recursive.
         // Use findTree(), above.  Do not use any methods that are below.
         // DO NOT traverse the tree twice looking for the same professor--don't duplicate work.
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+        assert !contains(newAdvisee.name());
+        if (!contains(advisorName)){
+            throw new NotFound();
+        } else{
+            PhDTree addedProf = new PhDTree(new Professor(newAdvisee));
+            findTree(advisorName).advisees.add(addedProf);
+            assertInv();
+        }
     }
 
 
