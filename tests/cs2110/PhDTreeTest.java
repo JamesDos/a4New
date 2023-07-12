@@ -376,7 +376,7 @@ public class PhDTreeTest {
         assertThrows(NotFound.class, () -> Amy_Huang.findAdvisor(prof9.toString()));
         PhDTree Matthew_Hui = Maya_Leong.findTree(prof3.name());
         assertThrows(NotFound.class, () -> Matthew_Hui.findAdvisor(prof3.name()));
-        
+
     }
 
     @Test
@@ -390,6 +390,36 @@ public class PhDTreeTest {
 
         // TODO: Add three additional tests of `findAcademicLineage()` using your own tree(s)
 
+        // Tree contains only root
+        PhDTree t1 = tree1();
+        List<Professor> t1Lineage = new LinkedList<>();
+        t1Lineage.add(prof1);
+        assertEquals(t1Lineage, t1.findAcademicLineage(prof1.name()));
+
+        // Testing each traversal in tree 7: traversal 1
+        PhDTree t7 = tree7();
+        List<Professor> t7Lineage = new LinkedList<>();
+        t7Lineage.add(prof1);
+        t7Lineage.add(prof2);
+        t7Lineage.add(prof4);
+        t7Lineage.add(prof6);
+        assertEquals(t7Lineage, t7.findAcademicLineage(prof6.name()));
+        // Traversal 2
+        t7Lineage.remove(prof6);
+        t7Lineage.add(prof7);
+        assertEquals(t7Lineage, t7.findAcademicLineage(prof7.name()));
+        // Traversal 3 (Traversal stops before a leaf)
+        t7Lineage.remove(prof7);
+        assertEquals(t7Lineage, t7.findAcademicLineage(prof4.name()));
+        // Traversal 4
+        t7Lineage.remove(prof4);
+        t7Lineage.add(prof5);
+        assertEquals(t7Lineage, t7.findAcademicLineage(prof5.name()));
+        // Traversal 5
+        t7Lineage.remove(prof5);
+        t7Lineage.remove(prof2);
+        t7Lineage.add(prof3);
+        assertEquals(t7Lineage, t7.findAcademicLineage(prof3.name()));
     }
 
     @Test

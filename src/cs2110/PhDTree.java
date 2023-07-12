@@ -289,16 +289,26 @@ public class PhDTree {
         // Hint: The base case is when the root of this PhDTree is `targetName`, in which case the
         // lineage is a list containing only `targetName`.
         //throw new UnsupportedOperationException();
-        List<Professor> list = new LinkedList<Professor>();
+        assert targetName!= null && !targetName.isEmpty();
+        List<Professor> list = new LinkedList<>();
+        list.add(this.prof());
         if(targetName.equals(professor.name())){
-            list.add(professor);
-            System.out.println(professor);
+            //list.add(professor);
+            //System.out.println(professor);
             return list;
         }
-        for(PhDTree advise:advisees){
-            lineageHelper(advise.findAcademicLineage(targetName));
+        for(PhDTree advisee:advisees){
+            //lineageHelper(advise.findAcademicLineage(targetName));
+            try{
+                // Recursive call returns a list; list.addAll adds all the elements from the
+                // returned list and adds them to the current list
+                list.addAll(advisee.findAcademicLineage(targetName));
+                return list;
+            } catch(NotFound ignored){
+
+            }
         }
-        return list;
+        throw new NotFound();
     }
 
     public List<Professor> lineageHelper(List<Professor> l){
