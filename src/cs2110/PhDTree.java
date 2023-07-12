@@ -251,6 +251,7 @@ public class PhDTree {
 
         // Throws not found if targetAdvisee is not in tree or if they are the root of the tree
         // 1st base case
+        assert targetAdviseeName!= null && !targetAdviseeName.isEmpty();
         if (contains(targetAdviseeName) &&
                 !targetAdviseeName.equals(this.prof().name())) {
             for (PhDTree advisee : advisees) {
