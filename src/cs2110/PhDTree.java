@@ -329,9 +329,26 @@ public class PhDTree {
         // Instead, use `findAcademicLineage()` to find the routes to the two advisees, then iterate
         // over the common prefix of the routes.  If iterating using indices, ensure that the data
         // structure can be iterated over efficiently.
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+        // TODO: make function more efficient: get(i) makes time complexity at least O(n^2)
+        assert prof1Name != null && !prof1Name.isEmpty();
+        assert prof2Name != null && !prof2Name.isEmpty();
+        // findAcademicLineage throws NotFound is prof1 or prof2 does not exist current tree
+        List<Professor> prof1Lineage = findAcademicLineage(prof1Name);
+        List<Professor> prof2Lineage = findAcademicLineage(prof2Name);
+        // The last node that's in both lineage lists will be the root of the subtree that contains
+        // both prof1 and prof2; both lineage lists start at root of the tree
+        List<Professor> smallerList = (prof1Lineage.size()>=prof2Lineage.size())? prof2Lineage:
+                prof1Lineage;
+        Professor prev = smallerList.get(0);
+        for(int i = 1; i < smallerList.size(); i++){
+            if(!prof1Lineage.get(i).equals(prof2Lineage.get(i))){
+                return prev;
+            } else{
+                prev = prof2Lineage.get(i);
+            }
+        } return prev;
     }
-
     /**
      * Return a (single line) String representation of this PhDTree. If this PhDTree has no advisees
      * (it is a leaf), return the root professor's name. Otherwise, return the root professor's name
@@ -398,5 +415,11 @@ public class PhDTree {
         // TODO 9: Implement this method according to its specification.
         // Implementation constraint: This method must be recursive.
         // Traverse the tree in PREORDER, respecting the ordering of advisees.
+        out.println(prof().name() + " - " + prof().phdYear());
+        if (numAdvisees() != 0){
+            for(PhDTree advisee: advisees){
+                advisee.printProfessors(out);
+            }
+        }
     }
 }

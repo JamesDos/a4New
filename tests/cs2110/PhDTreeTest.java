@@ -403,6 +403,7 @@ public class PhDTreeTest {
         t7Lineage.add(prof2);
         t7Lineage.add(prof4);
         t7Lineage.add(prof6);
+        System.out.println(t7Lineage);
         assertEquals(t7Lineage, t7.findAcademicLineage(prof6.name()));
         // Traversal 2
         t7Lineage.remove(prof6);
@@ -431,6 +432,43 @@ public class PhDTreeTest {
 
         // TODO: Add three additional tests of `commonAncestor()` using your own tree(s)
 
+        // Tree with only root
+        PhDTree t1 = tree1();
+        assertEquals(prof1, t1.commonAncestor(prof1.name(), prof1.name()));
+        // One of inputted profs is not in given tree
+        assertThrows(NotFound.class, () -> t1.commonAncestor(prof1.name(), prof3.name()));
+        // Both inputted profs are not in given tree
+        assertThrows(NotFound.class, () -> t1.commonAncestor(prof5.name(), prof3.name()));
+
+        // Tree of height 2
+        PhDTree t5 = tree5();
+        // Overlapping Traversal Paths Between Root and Leaf Nodes
+        assertEquals(prof1, t5.commonAncestor(prof2.name(), prof4.name()));
+        assertEquals(prof1, t5.commonAncestor(prof3.name(), prof4.name()));
+        assertEquals(prof1, t5.commonAncestor(prof2.name(), prof3.name()));
+        assertThrows(NotFound.class, () -> t5.commonAncestor(prof5.name(), prof3.name()));
+
+        // Tree of height 3
+        PhDTree t6 = tree6();
+        // Comparison of nodes of different heights
+        assertEquals(prof1, t6.commonAncestor(prof4.name(), prof7.name()));
+        assertEquals(prof1, t6.commonAncestor(prof1.name(), prof5.name()));
+        assertEquals(prof1, t6.commonAncestor(prof1.name(), prof3.name()));
+        assertEquals(prof1, t6.commonAncestor(prof2.name(), prof6.name()));
+        assertEquals(prof2, t6.commonAncestor(prof4.name(), prof5.name()));
+        // Overlapping traversal paths between; root subtree is not root of entire tree
+        assertEquals(prof2, t6.commonAncestor(prof2.name(), prof5.name()));
+        // Common ancestor of ones self (leaf node)
+        assertEquals(prof6, t6.commonAncestor(prof6.name(), prof6.name()));
+        assertThrows(NotFound.class, () -> t6.commonAncestor(prof2.name(), prof9.name()));
+
+        // Tree of height 4
+        PhDTree t7 = tree7();
+        assertEquals(prof1, t7.commonAncestor(prof6.name(), prof3.name()));
+        assertEquals(prof1, t7.commonAncestor(prof6.name(), prof1.name()));
+        assertEquals(prof2, t7.commonAncestor(prof6.name(), prof5.name()));
+        assertEquals(prof2, t7.commonAncestor(prof4.name(), prof5.name()));
+        assertThrows(NotFound.class, () -> t7.commonAncestor(prof7.name(), prof9.name()));
     }
 
     @Test
@@ -463,6 +501,84 @@ public class PhDTreeTest {
 
         // TODO: Add three additional tests of `printProfessors()` using your own tree(s)
         // Feel free to define a helper method to avoid duplicated testing code.
+        {
+            PhDTree t4 = tree4();
+            String[] expected = {
+                    "Amy Huang - 2023",
+                    "Maya Leong - 2023",
+                    "Matthew Hui - 2025"
+            };
+            assertArrayEquals(expected, testPrintProfessorsHelper(t4));
+        }
+        {
+            PhDTree t5 = tree5();
+            String[] expected = {
+                    "Amy Huang - 2023",
+                    "Arianna Curillo - 2022",
+                    "Maya Leong - 2023",
+                    "Matthew Hui - 2025",
+            };
+            assertArrayEquals(expected, testPrintProfessorsHelper(t5));
+        }
+        {
+            PhDTree t6 = tree6();
+            String[] expected = {
+                    "Amy Huang - 2023",
+                    "Maya Leong - 2023",
+                    "Arianna Curillo - 2022",
+                    "Michelle Gao - 2022",
+                    "Matthew Hui - 2025",
+                    "Isa Siu - 2024",
+                    "prof7 - 2027"
 
+            };
+            assertArrayEquals(expected, testPrintProfessorsHelper(t6));
+        }
+        {
+            PhDTree t7 = tree7();
+            String[] expected = {
+                    "Amy Huang - 2023",
+                    "Maya Leong - 2023",
+                    "Arianna Curillo - 2022",
+                    "Isa Siu - 2024",
+                    "prof7 - 2027",
+                    "Michelle Gao - 2022",
+                    "Matthew Hui - 2025"
+
+            };
+            assertArrayEquals(expected, testPrintProfessorsHelper(t7));
+        }
+        {
+            PhDTree t8 = tree8();
+            String[] expected = {
+                    "Amy Huang - 2023",
+                    "Maya Leong - 2023",
+                    "Matthew Hui - 2025",
+                    "Arianna Curillo - 2022",
+                    "Michelle Gao - 2022",
+                    "Isa Siu - 2024",
+                    "prof7 - 2027"
+            };
+            assertArrayEquals(expected, testPrintProfessorsHelper(t8));
+        }
+        {
+            PhDTree t9 = tree9();
+            String[] expected = {
+                    "Amy Huang - 2023",
+                    "Arianna Curillo - 2022",
+                    "Maya Leong - 2023",
+                    "Michelle Gao - 2022",
+                    "Matthew Hui - 2025"
+            };
+            assertArrayEquals(expected, testPrintProfessorsHelper(t9));
+        }
+    }
+    /** Helper method that returns the formatted result of calling printProfessors on tree 't' */
+    private String[] testPrintProfessorsHelper(PhDTree t){
+        StringWriter out = new StringWriter();
+        PrintWriter pw = new PrintWriter(out);
+        t.printProfessors(pw);
+        pw.flush();
+        return out.toString().split("\\R");
     }
 }
