@@ -145,28 +145,40 @@ public class PhDApp {
             //throw new UnsupportedOperationException();
             String[] firstProf = sc.nextLine().split(",",-1);
             System.out.println(firstProf.length + firstProf[0]);
-            if(firstProf[2] != ""){
+            if(!firstProf[2].equals("")){
                 throw new InputFormatException("Unexpected root professor");
             }
-            int year = Integer.parseInt(firstProf[1]);
+            int year;
+            try{
+                year = Integer.parseInt(firstProf[1]);
+            } catch(NumberFormatException e){
+                throw new InputFormatException("Year is not a number");
+            }
             Professor rootProf = new Professor(firstProf[0],year);
             PhDTree tree = new PhDTree(rootProf);
-            Professor proRef = rootProf;
             while(sc.hasNext()){
                 String[] professorInput = sc.nextLine().split(",",-1);
                 if(professorInput.length != 3){
                     throw new InputFormatException("Unexpected root professor");
                 }
-                year = Integer.parseInt(professorInput[1]);
+                try{
+                    year = Integer.parseInt(professorInput[1]);
+                } catch(NumberFormatException e){
+                    throw new InputFormatException("Year is not a number");
+                }
+                String advisor = professorInput[2];
                 Professor professorIn = new Professor(professorInput[0],year);
                     try {
-                        tree.insert(proRef.name(), professorIn);
-                    }catch ( NotFound ignored){
-
+                        tree.insert(advisor, professorIn);
+                    }catch (NotFound e){
+                        throw new InputFormatException("Advisor is not previously declared "
+                                + "as an advisee");
+                    } catch (AssertionError e) {
+                        throw new InputFormatException("Duplicate advisees");
                     }
-                }
-            return tree;
             }
+            return tree;
+        }
     }
 
     /**
@@ -301,7 +313,15 @@ public class PhDApp {
         String targetName = arg.trim();
 
         // TODO 11: Complete this method to satisfy the application requirements.
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+        PrintWriter pw = new PrintWriter(System.out);
+        if(professorTree.contains(targetName)){
+            pw.println("This professor is contained in the tree.");
+            pw.flush();
+        } else{
+            pw.println("This professor is not contained in the tree.");
+            pw.flush();
+        }
     }
 
     /**
@@ -310,7 +330,23 @@ public class PhDApp {
      */
     public void doSize(String arg) {
         // TODO 12: Implement this method to satisfy the application requirements.
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
+        PrintWriter pw = new PrintWriter(System.out);
+        if (arg.isEmpty()){
+            int size = professorTree.size();
+            pw.println("The number of nodes in this tree is: " + size + ".");
+            pw.flush();
+        } else{
+            String targetName = arg.trim();
+            try{
+                int size = professorTree.findTree(targetName).size();
+                pw.println("The number of nodes in this tree is: " + size + ".");
+                pw.flush();
+            } catch (NotFound e){
+                pw.println("This professor does not exist in the tree.");
+                pw.flush();
+            }
+        }
     }
 
     /**
@@ -319,7 +355,25 @@ public class PhDApp {
      */
     public void doAdvisor(String arg) {
         // TODO 13: Implement this method to satisfy the application requirements.
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+        if (arg.isEmpty()) {
+            throw new IllegalArgumentException("Missing argument");
+        }
+        String targetName = arg.trim();
+        PrintWriter pw = new PrintWriter(System.out);
+        if (professorTree.prof().name().equals(targetName)){
+            pw.println("This professor does not have an advisor in the tree.");
+            pw.flush();
+        } else {
+            try {
+                Professor advisor = professorTree.findAdvisor(arg);
+                pw.println("The advisor of this advisee is: " + advisor + ".");
+                pw.flush();
+            } catch (NotFound e){
+                pw.println("This professor does not exist in the tree.");
+                pw.flush();
+            }
+        }
     }
 
     /**

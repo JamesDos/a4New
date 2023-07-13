@@ -22,9 +22,12 @@ public class PhDTreeTest {
     private static final Professor prof6 = new Professor("Isa Siu", 2024);
     private static final Professor prof7 = new Professor("prof7", 2027);
 
-    private static final Professor prof8 = new Professor("Curran_Muhlberger", 2027);
-    private static final Professor prof9 = new Professor("Tomer_Shamir", 2027);
-    private static final Professor prof10 = new Professor("David_Gries", 2027);
+    private static final Professor prof8 = new Professor("Curran_Muhlberger", 2014);
+    private static final Professor prof9 = new Professor("Tomer_Shamir", 2023);
+    private static final Professor prof10 = new Professor("David_Gries", 1966);
+    private static final Professor prof11 = new Professor("Diego_Virtue", 2028);
+    private static final Professor prof12 = new Professor("Tanvi_Namjoshi", 2028);
+
 
 
     // These helper methods create a copy of each Professor object, which would normally be seen as
@@ -109,7 +112,7 @@ public class PhDTreeTest {
         return t;
     }
 
-    // Tree from handout
+    // Trees from handout
     private static PhDTree handoutTree() throws NotFound{
         PhDTree t = new PhDTree(new Professor(prof2));
         t.insert(prof2.name(), new Professor(prof3));
@@ -118,6 +121,17 @@ public class PhDTreeTest {
         t.insert(prof2.name(), new Professor(prof8));
         t.insert(prof8.name(), new Professor(prof9));
         return t;
+    }
+
+    private static PhDTree handoutTree2() throws NotFound{
+        PhDTree Amy_Huang = new PhDTree(new Professor(prof1));
+        Amy_Huang.insert(prof1.name(), new Professor(prof3));
+        Amy_Huang.insert(prof3.name(), new Professor(prof2));
+        Amy_Huang.insert(prof2.name(), new Professor(prof10));
+        Amy_Huang.insert(prof1.name(), new Professor(prof8));
+        Amy_Huang.insert(prof8.name(), new Professor(prof9));
+        Amy_Huang.insert(prof8.name(), new Professor(prof11));
+        return Amy_Huang;
     }
 
 
@@ -421,6 +435,24 @@ public class PhDTreeTest {
         t7Lineage.remove(prof2);
         t7Lineage.add(prof3);
         assertEquals(t7Lineage, t7.findAcademicLineage(prof3.name()));
+
+        // Tree and testcases from handout
+        PhDTree Amy_Huang = handoutTree2();
+        List<Professor> lin = new LinkedList<>();
+        lin.add(prof1);
+        lin.add(prof8);
+        lin.add(prof9);
+        assertEquals(lin, Amy_Huang.findAcademicLineage(prof9.name()));
+        lin.remove(prof9);
+        lin.remove(prof8);
+        assertEquals(lin, Amy_Huang.findAcademicLineage(prof1.name()));
+        assertThrows(NotFound.class, () -> Amy_Huang.findAcademicLineage(prof12.name()));
+        PhDTree Matthew_Hui = Amy_Huang.findTree(prof3.name());
+        lin.remove(prof1);
+        lin.add(prof3);
+        lin.add(prof2);
+        assertThrows(NotFound.class, () -> Matthew_Hui.findAcademicLineage(prof8.name()));
+        assertEquals(lin, Matthew_Hui.findAcademicLineage(prof2.name()));
     }
 
     @Test
@@ -469,6 +501,16 @@ public class PhDTreeTest {
         assertEquals(prof2, t7.commonAncestor(prof6.name(), prof5.name()));
         assertEquals(prof2, t7.commonAncestor(prof4.name(), prof5.name()));
         assertThrows(NotFound.class, () -> t7.commonAncestor(prof7.name(), prof9.name()));
+
+        // Example Tree from handout
+        PhDTree Amy_Huang = handoutTree2();
+        assertEquals(prof1, Amy_Huang.commonAncestor(prof3.name(), prof1.name()));
+        assertEquals(prof3, Amy_Huang.commonAncestor(prof3.name(), prof3.name()));
+        assertEquals(prof1, Amy_Huang.commonAncestor(prof3.name(), prof8.name()));
+        assertEquals(prof1, Amy_Huang.commonAncestor(prof11.name(), prof10.name()));
+        PhDTree Matthew_Hui = Amy_Huang.findTree(prof3.name());
+        assertEquals(prof3, Matthew_Hui.commonAncestor(prof3.name(), prof2.name()));
+        assertThrows(NotFound.class, () -> Matthew_Hui.commonAncestor(prof9.name(), prof2.name()));
     }
 
     @Test
@@ -571,6 +613,18 @@ public class PhDTreeTest {
                     "Matthew Hui - 2025"
             };
             assertArrayEquals(expected, testPrintProfessorsHelper(t9));
+        }
+        {
+            PhDTree tHandout = handoutTree();
+            String[] expected = {
+                    "Maya Leong - 2023",
+                    "Curran_Muhlberger - 2014",
+                    "Tomer_Shamir - 2023",
+                    "Matthew Hui - 2025",
+                    "Amy Huang - 2023",
+                    "David_Gries - 1966"
+            };
+            assertArrayEquals(expected, testPrintProfessorsHelper(tHandout));
         }
     }
     /** Helper method that returns the formatted result of calling printProfessors on tree 't' */

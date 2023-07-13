@@ -294,8 +294,6 @@ public class PhDTree {
         List<Professor> list = new LinkedList<>();
         list.add(this.prof());
         if(targetName.equals(professor.name())){
-            //list.add(professor);
-            //System.out.println(professor);
             return list;
         }
         for(PhDTree advisee:advisees){
@@ -310,13 +308,6 @@ public class PhDTree {
             }
         }
         throw new NotFound();
-    }
-
-    public List<Professor> lineageHelper(List<Professor> l){
-        List<Professor> list = new LinkedList<Professor>();
-        ((LinkedList) list).push(l.get(0));
-        System.out.println("Helper" + list);
-        return list;
     }
 
     /**
@@ -339,37 +330,26 @@ public class PhDTree {
         List<Professor> prof2Lineage = findAcademicLineage(prof2Name);
         int size1 = prof1Lineage.size();
         int size2 = prof2Lineage.size();
+        int diff = size1 - size2;
         // The last node that's in both lineage lists will be the root of the subtree that contains
         // both prof1 and prof2; both lineage lists start at root of the tree
-        ListIterator<Professor> it1 = prof1Lineage.listIterator();
-        ListIterator<Professor> it2 = prof2Lineage.listIterator();
-        System.out.println(it1.hasPrevious());
-        System.out.println(it2.hasPrevious());
+        ListIterator<Professor> it1 = prof1Lineage.listIterator(size1);
+        ListIterator<Professor> it2 = prof2Lineage.listIterator(size2);
         while(it1.hasPrevious() && it2.hasPrevious()){
-            for(int i = 0; i < Math.abs(size1 - size2); i++){
+            for(int i = 0; i < Math.abs(diff); i++){
                 if(size1 - size2 < 0){
                     it2.previous();
                 } else{
                     it1.previous();
                 }
             }
+            diff = 0;
             Professor prev1 = it1.previous();
             Professor prev2 = it2.previous();
             if(prev1.equals(prev2)){
                 return prev1;
             }
-        } return null;
-
-        /**
-        Professor prev = smallerList.get(0);
-        for(int i = 1; i < smallerList.size(); i++){
-            if(!prof1Lineage.get(i).equals(prof2Lineage.get(i))){
-                return prev;
-            } else{
-                prev = smallerList.get(i);
-            }
-        } return prev;
-         */
+        } throw new NotFound();
     }
     /**
      * Return a (single line) String representation of this PhDTree. If this PhDTree has no advisees
