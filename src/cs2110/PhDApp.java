@@ -56,7 +56,7 @@ public class PhDApp {
      * Name of the file to read the genealogy tree from.  Defaults to "professors.csv" in the
      * current working directory.
      */
-    private String csvFileName = "professors.csv";
+    private String csvFileName = "professors-shortened.csv";
 
     /**
      * The academic genealogy tree to be read and queried.
@@ -142,8 +142,31 @@ public class PhDApp {
             // TODO 10: Implement the remainder of this method according to its specification.
             // Use `sc` to read lines and `split()` to separate fields.
             // Remember that the first line after the header is special - it represents the root.
-            throw new UnsupportedOperationException();
-        }
+            //throw new UnsupportedOperationException();
+            String[] firstProf = sc.nextLine().split(",",-1);
+            System.out.println(firstProf.length + firstProf[0]);
+            if(firstProf[2] != ""){
+                throw new InputFormatException("Unexpected root professor");
+            }
+            int year = Integer.parseInt(firstProf[1]);
+            Professor rootProf = new Professor(firstProf[0],year);
+            PhDTree tree = new PhDTree(rootProf);
+            Professor proRef = rootProf;
+            while(sc.hasNext()){
+                String[] professorInput = sc.nextLine().split(",",-1);
+                if(professorInput.length != 3){
+                    throw new InputFormatException("Unexpected root professor");
+                }
+                year = Integer.parseInt(professorInput[1]);
+                Professor professorIn = new Professor(professorInput[0],year);
+                    try {
+                        tree.insert(proRef.name(), professorIn);
+                    }catch ( NotFound ignored){
+
+                    }
+                }
+            return tree;
+            }
     }
 
     /**
