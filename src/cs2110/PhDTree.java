@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
@@ -336,18 +337,39 @@ public class PhDTree {
         // findAcademicLineage throws NotFound is prof1 or prof2 does not exist current tree
         List<Professor> prof1Lineage = findAcademicLineage(prof1Name);
         List<Professor> prof2Lineage = findAcademicLineage(prof2Name);
+        int size1 = prof1Lineage.size();
+        int size2 = prof2Lineage.size();
         // The last node that's in both lineage lists will be the root of the subtree that contains
         // both prof1 and prof2; both lineage lists start at root of the tree
-        List<Professor> smallerList = (prof1Lineage.size()>=prof2Lineage.size())? prof2Lineage:
-                prof1Lineage;
+        ListIterator<Professor> it1 = prof1Lineage.listIterator();
+        ListIterator<Professor> it2 = prof2Lineage.listIterator();
+        System.out.println(it1.hasPrevious());
+        System.out.println(it2.hasPrevious());
+        while(it1.hasPrevious() && it2.hasPrevious()){
+            for(int i = 0; i < Math.abs(size1 - size2); i++){
+                if(size1 - size2 < 0){
+                    it2.previous();
+                } else{
+                    it1.previous();
+                }
+            }
+            Professor prev1 = it1.previous();
+            Professor prev2 = it2.previous();
+            if(prev1.equals(prev2)){
+                return prev1;
+            }
+        } return null;
+
+        /**
         Professor prev = smallerList.get(0);
         for(int i = 1; i < smallerList.size(); i++){
             if(!prof1Lineage.get(i).equals(prof2Lineage.get(i))){
                 return prev;
             } else{
-                prev = prof2Lineage.get(i);
+                prev = smallerList.get(i);
             }
         } return prev;
+         */
     }
     /**
      * Return a (single line) String representation of this PhDTree. If this PhDTree has no advisees
