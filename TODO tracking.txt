@@ -1,0 +1,12 @@
+Improper formatting
+Header is incorrect
+Root Prof has advisor
+Year is not a number (try doubles and strings/char)
+multiple CSV blocks(>3)
+empty and null block in CSV
+Advisor not in tree
+Duplicate Professor name (Should be invalid)
+
+
+TODO make sure all invariant after changing any data
+
