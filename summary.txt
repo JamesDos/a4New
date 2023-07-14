@@ -1,16 +1,25 @@
 (Fill out this file with brief answers.)
 
 Name(s) and NetID(s) of group members:
-
+Lam Le ldl56 James Tu jt737
 Time spent on the assignment, in hours:
-
+12 hours
 Implementation strategy:
-    (describe how you went about implementing the assignment and how the work was divided between the partners.)
+    Split testing and TODOs between two partners via github. When error occured that we could not
+    solve ourselves, we met up together or utilized office hours.
 
 Testing strategy:
-    (how did you perform testing and design test cases to achieve coverage?)
+    Black box testing was used for each functions.
+    After functions were created, we then used glass box testing and checking how different input
+    affected our program. End to end testing was also glass box testing as a list of edge cases were
+    utilized to very program responses.
 
 Known problems:
-    (are there any things that do not work?)
+    None as we know of.
 
 Comments on the assignment:
+    The assignment did a great job at building our confidence in recursion. The efficiency
+    of TODO 8, did restrict out ability to use .get() methods, however it forced us to be
+    tryout list iterators. Overall testing for this assignment was much more comprehensive due to
+    the variations in possible input. The process of coming up with testing prior writing
+    the function was very helpful in preventing rewriting code.
