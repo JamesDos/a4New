@@ -1,15 +1,13 @@
 package cs2110;
 
+import javax.print.DocFlavor;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
+import java.util.LinkedList;
 
 /**
  * The main program of the A4 assignment. It reads an academic genealogy in CSV format and supports
@@ -387,9 +385,17 @@ public class PhDApp {
         if (profNames.length != 2) {
             throw new IllegalArgumentException("Missing arguments");
         }
-
         // TODO 14: Complete this method to satisfy the application requirements.
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
+        PrintWriter pw = new PrintWriter(System.out);
+        try{
+            Professor proRet = professorTree.commonAncestor(profNames[0],profNames[1]);
+            pw.println("The common ancestor of these professors is: "+proRet+",");
+            pw.flush();
+        }catch(NotFound ignore){
+            System.out.println("These professors do not have a common ancestor in the tree.\n");
+            pw.flush();
+        }
     }
 
     /**
@@ -398,6 +404,17 @@ public class PhDApp {
      */
     public void doLineage(String arg) {
         // TODO 15: Implement this method to satisfy the application requirements.
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
+        try{
+            List<Professor> linReturn = professorTree.findAcademicLineage(arg);
+            StringBuilder s = new StringBuilder();
+            for(Professor prof: linReturn){
+                s.append(prof + "--");
+            }
+            String reply = s.toString().substring(0,s.length()-2);
+            System.out.println("The lineage is: " + reply + ".");
+        }catch(NotFound ignore){
+            System.out.println("This professor does not exist in the tree");
+        }
     }
 }
