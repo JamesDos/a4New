@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.*;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 /**
  * The main program of the A4 assignment. It reads an academic genealogy in CSV format and supports
@@ -54,7 +56,7 @@ public class PhDApp {
      * Name of the file to read the genealogy tree from.  Defaults to "professors.csv" in the
      * current working directory.
      */
-    private String csvFileName = "professors-shortened.csv";
+    private String csvFileName = "professors.csv";
 
     /**
      * The academic genealogy tree to be read and queried.
@@ -142,7 +144,6 @@ public class PhDApp {
             // Remember that the first line after the header is special - it represents the root.
             //throw new UnsupportedOperationException();
             String[] firstProf = sc.nextLine().split(",",-1);
-            System.out.println(firstProf.length + firstProf[0]);
             if(!firstProf[2].equals("")){
                 throw new InputFormatException("Unexpected root professor");
             }
@@ -405,6 +406,10 @@ public class PhDApp {
     public void doLineage(String arg) {
         // TODO 15: Implement this method to satisfy the application requirements.
         //throw new UnsupportedOperationException();
+        if(arg == "" || arg == null){
+            throw new IllegalArgumentException("Missing argument");
+        }
+        PrintWriter pw = new PrintWriter(System.out);
         try{
             List<Professor> linReturn = professorTree.findAcademicLineage(arg);
             StringBuilder s = new StringBuilder();
@@ -412,9 +417,11 @@ public class PhDApp {
                 s.append(prof + "--");
             }
             String reply = s.toString().substring(0,s.length()-2);
-            System.out.println("The lineage is: " + reply + ".");
+            pw.println("The lineage is: " + reply + ".");
+            pw.flush();
         }catch(NotFound ignore){
-            System.out.println("This professor does not exist in the tree");
+            pw.println("This professor does not exist in the tree.");
+            pw.flush();
         }
     }
 }
