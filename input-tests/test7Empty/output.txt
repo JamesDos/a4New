@@ -1,0 +1,5 @@
+Exception in thread "main" java.util.NoSuchElementException: No line found
+	at java.base/java.util.Scanner.nextLine(Scanner.java:1651)
+	at cs2110.PhDApp.csvToTree(PhDApp.java:137)
+	at cs2110.PhDApp.run(PhDApp.java:82)
+	at cs2110.PhDApp.main(PhDApp.java:38)

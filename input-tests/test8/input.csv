@@ -1,11 +1,11 @@
 advisee,year,advisor
-Isaac Newton,1668,
-Roger Cotes,1706,Allen Turing
-Robert Smith,1715,Roger Cotes
-Walter Taylor,1723,Robert Smith
-Stephen Whisson,1742,Walter Taylor
-Thomas Postlethwaite,1756,Stephen Whisson
-Thomas Jones,1782,Thomas Postlethwaite
-Adam Sedgwick,1811,Thomas Jones
-William Hopkins,1830,Adam Sedgwick
-Arthur Cayley,1864,William Hopkins
+Prof Root,1000,
+Prof Two,2000,Prof Root
+Prof Three,3000,Allen Turing
+Prof Four,3000,Prof Two
+Prof Five,4000,Prof Four
+Prof Six,4000,Prof Four
+Prof Seven,4000,Prof Three
+Prof Eight,4000,Prof Three
+Prof Nine,5000,Prof Eight
+Prof Ten,5000,Prof Five

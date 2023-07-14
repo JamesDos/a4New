@@ -1,2 +1,12 @@
 advisee,year,advisor
-Isaac Newton,1668,Allen Turing
+advisee,year,advisor,Allen Turing
+Prof Root,1000,
+Prof Two,2000,Prof Root
+Prof Three,3000,Prof Two
+Prof Four,3000,Prof Two
+Prof Five,4000,Prof Four
+Prof Six,4000,Prof Four
+Prof Seven,4000,Prof Three
+Prof Eight,4000,Prof Three
+Prof Nine,5000,Prof Eight
+Prof Ten,5000,Prof Five

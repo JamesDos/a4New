@@ -1,0 +1,22 @@
+help
+print [<advisor name>]: print every professor in the academic genealogy of the given professor (default: root) with their degree year
+contains <prof name> : whether this professor is in the PhD tree
+size [<advisor name>] : the number of academic descendants of the given professor (default: root), including themselves
+advisor <advisee name> : the direct advisor of the given professor
+ancestor <prof 1>, <prof 2> : the common ancestor between the two given professors
+lineage <prof name> : the sequence of advisors from the root to the given professor
+exit : exit the program
+Prof Eight - 4000
+Prof Nine - 5000
+Prof Five - 4000
+Prof Ten - 5000
+This professor is contained in the tree.
+This professor is contained in the tree.
+This professor is contained in the tree.
+This professor is not contained in the tree.
+The number of nodes in this tree is: 10.
+The advisor of this advisee is: Prof Three (3000).
+The advisor of this advisee is: Prof Four (3000).
+The common ancestor of these professors is: Prof Two (2000),
+The lineage is: Prof Root (1000)--Prof Two (2000)--Prof Three (3000)--Prof Eight (4000)--Prof Nine (5000).
+The lineage is: Prof Root (1000)--Prof Two (2000)--Prof Four (3000)--Prof Five (4000)--Prof Ten (5000).

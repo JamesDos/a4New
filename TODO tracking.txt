@@ -1,3 +1,4 @@
+Normal input
 Improper formatting
 Header is incorrect
 Root Prof has advisor

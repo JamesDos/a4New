@@ -1,11 +1,11 @@
 advisee,year,advisor
 Prof Root,1000,
-Prof Two,2000,Prof Root
-Prof Three,3000,Prof Two
+Prof Two,2000,Prof Root,,
+Prof Three,3000,Prof Two,Prof Root
 Prof Four,3000,Prof Two
 Prof Five,4000,Prof Four
 Prof Six,4000,Prof Four
 Prof Seven,4000,Prof Three
 Prof Eight,4000,Prof Three
 Prof Nine,5000,Prof Eight
-Prof Three,5000,Prof Five
+Prof Ten,5000,Prof Five

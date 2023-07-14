@@ -158,7 +158,7 @@ public class PhDApp {
             while(sc.hasNext()){
                 String[] professorInput = sc.nextLine().split(",",-1);
                 if(professorInput.length != 3){
-                    throw new InputFormatException("Unexpected root professor");
+                    throw new InputFormatException("Unexpected professor format");
                 }
                 try{
                     year = Integer.parseInt(professorInput[1]);
